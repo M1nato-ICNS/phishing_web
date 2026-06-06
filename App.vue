@@ -1,0 +1,60 @@
+<script setup>
+import { ref } from 'vue'
+import Navbar from './components/Navbar.vue'
+import LoginForm from './components/LoginForm.vue'
+import StatusModal from './components/StatusModal.vue'
+import Footer from './components/Footer.vue'
+
+// 使用 ref 控制 Modal 的開關與內容，符合作業要求。
+const isModalVisible = ref(false)
+const modalTitle = ref('系統通知')
+const modalMessage = ref('系統維護中，請稍後再試。')
+
+function handleLoginSubmit(payload) {
+  console.log('[App] 接收到登入事件:', payload)
+  modalTitle.value = 'CLIP STUDIO ACCOUNT'
+  modalMessage.value = '系統維護中，請稍後再試。若發現可疑登入頁面，請先確認網址與憑證。'
+  isModalVisible.value = true
+}
+
+function closeModal() {
+  isModalVisible.value = false
+}
+</script>
+
+<template>
+  <div class="app-shell">
+    <Navbar />
+
+    <main class="content-wrapper">
+      <LoginForm @submit-login="handleLoginSubmit" />
+    </main>
+
+    <StatusModal
+      :visible="isModalVisible"
+      :title="modalTitle"
+      :message="modalMessage"
+      @close="closeModal"
+    />
+
+    <Footer />
+  </div>
+</template>
+
+<style scoped>
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f1f1f1;
+  color: #222;
+  font-family: Arial, 'Noto Sans TC', sans-serif;
+}
+
+.content-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 28px 16px 0;
+}
+</style>
